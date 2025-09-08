@@ -1,28 +1,17 @@
 import gradio as gr
 
-from tts_webui.utils.manage_model_state import manage_model_state
+from .api import tts
 
 available_voices = [
-    ('Female 2 🚺', 'expr-voice-2-f'),
-    ('Male 2 🚹', 'expr-voice-2-m'),
-    ('Male 3 🚹', 'expr-voice-3-m'),
-    ('Female 3 🚺', 'expr-voice-3-f'),
-    ('Male 4 🚹', 'expr-voice-4-m'),
-    ('Female 4 🚺', 'expr-voice-4-f'),
-    ('Male 5 🚹', 'expr-voice-5-m'),
-    ('Female 5 🚺', 'expr-voice-5-f'),
+    ("Female 2 🚺", "expr-voice-2-f"),
+    ("Male 2 🚹", "expr-voice-2-m"),
+    ("Male 3 🚹", "expr-voice-3-m"),
+    ("Female 3 🚺", "expr-voice-3-f"),
+    ("Male 4 🚹", "expr-voice-4-m"),
+    ("Female 4 🚺", "expr-voice-4-f"),
+    ("Male 5 🚹", "expr-voice-5-m"),
+    ("Female 5 🚺", "expr-voice-5-f"),
 ]
-
-@manage_model_state("kitten_tts")
-def get_model(repo="KittenML/kitten-tts-mini-0.1"):
-    from kittentts import KittenTTS
-    m = KittenTTS(repo)
-    return m
-
-def kitten_generate(model_name, text, voice):
-    m = get_model(model_name)
-    audio = m.generate(text, voice=voice)
-    return (24000, audio)
 
 
 def kitten_tts_ui():
@@ -31,7 +20,7 @@ def kitten_tts_ui():
     # Kitten TTS Mini 0.1 (CPU - ONNX)
     """
     )
-    
+
     with gr.Row():
         with gr.Column():
             input_text = gr.Textbox(label="Input")
@@ -46,7 +35,7 @@ def kitten_tts_ui():
             output_text = gr.Audio(label="Output")
 
     button.click(
-        fn=kitten_generate,
+        fn=tts,
         inputs=[model_name, input_text, voice],
         outputs=[output_text],
         api_name="kitten_tts",
@@ -55,7 +44,7 @@ def kitten_tts_ui():
 
 def extension__tts_generation_webui():
     kitten_tts_ui()
-    
+
     return {
         "package_name": "extension_kitten_tts",
         "name": "Kitten tts",

@@ -1,32 +1,56 @@
 import gradio as gr
 
+from tts_webui.utils.manage_model_state import manage_model_state
+
+available_voices = [
+    ('Female 2 🚺', 'expr-voice-2-f'),
+    ('Male 2 🚹', 'expr-voice-2-m'),
+    ('Male 3 🚹', 'expr-voice-3-m'),
+    ('Female 3 🚺', 'expr-voice-3-f'),
+    ('Male 4 🚹', 'expr-voice-4-m'),
+    ('Female 4 🚺', 'expr-voice-4-f'),
+    ('Male 5 🚹', 'expr-voice-5-m'),
+    ('Female 5 🚺', 'expr-voice-5-f'),
+]
+
+@manage_model_state("kitten_tts")
+def get_model(repo="KittenML/kitten-tts-mini-0.1"):
+    from kittentts import KittenTTS
+    m = KittenTTS(repo)
+    return m
+
+def kitten_generate(model_name, text, voice):
+    m = get_model(model_name)
+    audio = m.generate(text, voice=voice)
+    return (24000, audio)
+
 
 def kitten_tts_ui():
     gr.Markdown(
         """
-    # Kitten tts
-    
-    This is a template extension. Replace this content with your extension's functionality.
-    
-    To use it, simply modify this UI and add your custom logic.
+    # Kitten TTS Mini 0.1 (CPU - ONNX)
     """
     )
     
-    # Add your UI components here
-    # Example:
-    # with gr.Row():
-    #     with gr.Column():
-    #         input_text = gr.Textbox(label="Input")
-    #         button = gr.Button("Process")
-    #     with gr.Column():
-    #         output_text = gr.Textbox(label="Output")
-    # 
-    # button.click(
-    #     fn=your_processing_function,
-    #     inputs=[input_text],
-    #     outputs=[output_text],
-    #     api_name="kitten_tts",
-    # )
+    with gr.Row():
+        with gr.Column():
+            input_text = gr.Textbox(label="Input")
+            voice = gr.Dropdown(choices=available_voices, label="Voice")
+            model_name = gr.Dropdown(
+                choices=["KittenML/kitten-tts-mini-0.1"],
+                value="KittenML/kitten-tts-mini-0.1",
+                label="Model",
+            )
+            button = gr.Button("Process")
+        with gr.Column():
+            output_text = gr.Audio(label="Output")
+
+    button.click(
+        fn=kitten_generate,
+        inputs=[model_name, input_text, voice],
+        outputs=[output_text],
+        api_name="kitten_tts",
+    )
 
 
 def extension__tts_generation_webui():
@@ -35,15 +59,15 @@ def extension__tts_generation_webui():
     return {
         "package_name": "extension_kitten_tts",
         "name": "Kitten tts",
-        "requirements": "git+https://github.com/yourusername/extension_kitten_tts@main",
+        "requirements": "git+https://github.com/rsxdalv/extension_kitten_tts@main",
         "description": "A template extension for TTS Generation WebUI",
         "extension_type": "interface",
-        "extension_class": "tools",
-        "author": "Your Name",
-        "extension_author": "Your Name",
+        "extension_class": "text-to-speech",
+        "author": "KittenML",
+        "extension_author": "rsxdalv",
         "license": "MIT",
-        "website": "https://github.com/yourusername/extension_kitten_tts",
-        "extension_website": "https://github.com/yourusername/extension_kitten_tts",
+        "website": "https://github.com/rsxdalv/extension_kitten_tts",
+        "extension_website": "https://github.com/rsxdalv/extension_kitten_tts",
         "extension_platform_version": "0.0.1",
     }
 

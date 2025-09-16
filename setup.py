@@ -1,12 +1,12 @@
 import setuptools
 
 setuptools.setup(
-    name="extension_kitten_tts",
+    name="tts_webui_extension.kitten_tts",
     packages=setuptools.find_namespace_packages(),
     version="0.0.1",
     author="Your Name",
     description="A template extension for TTS Generation WebUI",
-    url="https://github.com/rsxdalv/extension_kitten_tts",
+    url="https://github.com/rsxdalv/tts_webui_extension.kitten_tts",
     project_urls={},
     scripts=[],
     install_requires=[
@@ -22,3 +22,4 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
 )
+

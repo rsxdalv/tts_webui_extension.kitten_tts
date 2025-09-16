@@ -9,7 +9,7 @@ def get_model(repo="KittenML/kitten-tts-mini-0.1"):
     return m
 
 
-def tts(model_name, text, voice):
+def tts(model_name, text, voice, speed=1.0):
     m = get_model(model_name)
-    audio = m.generate(text, voice=voice)
+    audio = m.generate(text, voice=voice, speed=speed)
     return (24000, audio)

@@ -26,7 +26,7 @@ def kitten_tts_ui():
             input_text = gr.Textbox(label="Input")
             voice = gr.Dropdown(choices=available_voices, label="Voice")
             model_name = gr.Dropdown(
-                choices=["KittenML/kitten-tts-mini-0.1"],
+                choices=["KittenML/kitten-tts-mini-0.1", "KittenML/kitten-tts-nano-0.2", "KittenML/kitten-tts-nano-0.1"],
                 value="KittenML/kitten-tts-mini-0.1",
                 label="Model",
             )
